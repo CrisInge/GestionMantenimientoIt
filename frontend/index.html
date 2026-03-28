@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="index.css">
+  <title>Gestión Mantenimiento</title>
+</head>
+<body>
+
+  <div class="cont">
+
+    <nav class="navbar">
+      <h1 style="text-align: center; padding: 10px; padding-top: 20px;">Dashboard</h1>
+      <ul>
+        <li><a href="#">Perfil</a></li>
+        <li><a href="#">Equipos</a></li>
+        <li><a href="#">Mantenimientos</a></li>
+        <li><a href="#">Historial de mantenimientos</a></li>
+        <button onclick="window.location.href='register.html'">
+          Registrar Usuarios
+        </button>
+      </ul>
+    </nav>
+
+    <div class="contEquipoMant">
+      <div class="contEquipos" id="contEquipos">
+        <h1>Equipos</h1>
+        <br><br>
+        <form id="formEquipo">
+          <input type="text" id="marca" placeholder="Marca">
+          <input type="text" id="modelo" placeholder="Modelo">
+          <input type="text" id="service_tag" placeholder="Service Tag">
+          <input type="text" id="dueno_equipo" placeholder="Nombre del usuario" required>
+          <input type="text" id="area" placeholder="Area">
+          <!-- <input type="text" id="usuario_asignado" placeholder="Asignar Tecnico"> -->
+          <select id="usuario_asignado"></select>
+          <button type="submit">Agregar</button>
+        </form>
+
+        <div class="datosEquipo">
+          <h3>Usuario</h3>
+          <h3>Marca</h3>
+          <h3>Modelo</h3>
+          <h3>Area</h3>
+          <h3>Service Tag</h3>
+          <h3>Tecnico</h3>
+        </div>
+        <ul id="listaEquipos"></ul>
+      </div>
+    
+      <div class="contMantenimiento">
+        <h1>Mantenimientos</h1>
+        <button onclick="logout()">Cerrar sesión</button>
+      
+        <!-- <form id="formMantenimiento">
+          <input type="text" id="service_tag_mant" placeholder="Service Tag" required>
+
+          <select id="tipo">
+            <option value="preventivo">Preventivo</option>
+            <option value="correctivo">Correctivo</option>
+          </select>
+
+          <input type="text" id="descripcion" placeholder="Descripción">
+
+          <button type="submit">Agregar</button>
+        </form> -->
+
+
+        <form id="formMantenimiento">
+          <!-- <input type="text" id="service_tag_mant" placeholder="Service Tag" required> -->
+          <select id="service_tag_mant" required>
+            <option value="">Selecciona un equipo</option>
+          </select>
+
+          <select id="tipo">
+            <option value="Preventivo">Preventivo</option>
+            <option value="Correctivo">Correctivo</option>
+          </select>
+
+          <input type="text" id="descripcion" placeholder="Descripción">
+
+          <select id="tecnico_mant"></select>
+          
+          <button type="submit">Agregar</button>
+        </form>
+
+        <ul id="listaMantenimientos"></ul>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="index.css">
+  <title>Gestión Mantenimiento</title>
+</head>
+<body>
+
+  <div class="cont">
+
+    <div class="dashboard">
+    </div>
+
+    <div class="contEquipoMant" >
+      <div class="contEquipos">
+        <h1>Equipos</h1>
+        
+        <form id="formEquipo">
+          <input type="text" id="marca" placeholder="Marca">
+          <input type="text" id="modelo" placeholder="Modelo">
+          <input type="text" id="service_tag" placeholder="Service Tag">
+          <input type="text" id="dueno_equipo" placeholder="Nombre del usuario" required>
+          <input type="text" id="area" placeholder="Area">
+          <input type="text" id="usuario_asignado" placeholder="Asignar Tecnico">
+          <button type="submit">Agregar</button>
+        </form>
+        <ul id="listaEquipos"></ul>
+      </div>
+    
+      <div class="contMantenimiento">
+        <h1>Mantenimientos</h1>
+      
+        <form id="formMantenimiento">
+          <input type="number" id="id_equipo" placeholder="ID Equipo" required>
+          <input type="text" id="tipo" placeholder="preventivo/correctivo" required>
+          <input type="text" id="descripcion" placeholder="Descripción">
+          <button type="submit">Agregar</button>
+        </form>
+        <ul id="listaMantenimientos"></ul>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>   -->
+
+
+
+
+
