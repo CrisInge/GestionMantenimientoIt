@@ -20,15 +20,6 @@ router.get('/', (req, res) => {
     res.json(result);
   });
 });
-// router.get('/', (req, res) => {
-//   db.query('SELECT * FROM equipos', (err, result) => {
-//     if (err) {
-//       console.error(err);
-//       return res.status(500).json({ error: 'Error al obtener equipos' });
-//     }
-//     res.json(result);
-//   });
-// });
 
 // =====================
 // POST (crear equipo)
@@ -72,6 +63,24 @@ router.put('/:id', (req, res) => {
         return res.status(500).json({ error: 'Error al actualizar equipo' });
       }
       res.json({ message: 'Equipo actualizado correctamente' });
+    }
+  );
+});
+
+// =======================
+// UPDATE EQUIPO
+// =======================
+router.put('/:id', (req, res) => {
+  const { dueno_equipo, marca, modelo, service_tag, area, usuario_asignado } = req.body;
+
+  db.query(
+    `UPDATE equipos 
+     SET dueno_equipo=?, marca=?, modelo=?, service_tag=?, area=?, usuario_asignado=?
+     WHERE id_equipo=?`,
+    [dueno_equipo, marca, modelo, service_tag, area, usuario_asignado, req.params.id],
+    (err) => {
+      if (err) return res.status(500).json(err);
+      res.json({ message: "Equipo actualizado" });
     }
   );
 });
