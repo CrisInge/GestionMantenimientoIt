@@ -7,40 +7,68 @@ const db = require('../config/db');
 // =======================
 // GET
 // =======================
+// router.get('/', (req, res) => {
+
 router.get('/', (req, res) => {
 
   const id_tecnico = req.query.id_tecnico;
   const id_equipo = req.query.id_equipo;
+  const estado = req.query.estado;
 
   let query = `
-  SELECT m.*, e.service_tag, u.nombre AS tecnico
-  FROM mantenimientos m
-  JOIN equipos e ON m.id_equipo = e.id_equipo
-  LEFT JOIN usuarios u ON m.id_tecnico = u.id
-  WHERE m.estado = 'Activo'
-`;
+    SELECT m.*, e.service_tag, u.nombre AS tecnico
+    FROM mantenimientos m
+    JOIN equipos e ON m.id_equipo = e.id_equipo
+    LEFT JOIN usuarios u ON m.id_tecnico = u.id
+  `;
 
+  let conditions = [];
   let params = [];
 
+  // filtros dinámicos
+  if (estado) {
+    conditions.push("m.estado = ?");
+    params.push(estado);
+  }
+
   if (id_tecnico) {
-    query += " AND m.id_tecnico = ?";
+    conditions.push("m.id_tecnico = ?");
     params.push(id_tecnico);
   }
 
   if (id_equipo) {
-    query += params.length ? " AND m.id_equipo = ?" : " WHERE m.id_equipo = ?";
+    conditions.push("m.id_equipo = ?");
     params.push(id_equipo);
   }
 
+  // aplicar WHERE solo si hay condiciones
+  if (conditions.length > 0) {
+    query += " WHERE " + conditions.join(" AND ");
+  }
 
-  db.query(query, id_tecnico ? [id_tecnico] : [], (err, result) => {
-    if (err) return res.status(500).json(err);
+  // ORDEN
+  query += `
+    ORDER BY 
+      CASE 
+        WHEN m.estado = 'Activo' THEN 0
+        ELSE 1
+      END,
+      m.fecha_inicio DESC
+  `;
+
+  // USAR PARAMS CORRECTAMENTE
+  db.query(query, params, (err, result) => {
+    if (err) {
+      console.log("SQL ERROR:", err);
+      return res.status(500).json(err);
+    }
     res.json(result);
   });
+
 });
 
 // =======================
-// 🔥 HISTORIAL POR EQUIPO
+//  HISTORIAL POR EQUIPO
 // =======================
 router.get('/historial/:id_equipo', (req, res) => {
 
@@ -58,19 +86,6 @@ router.get('/historial/:id_equipo', (req, res) => {
   });
 
 });
-
-
-// router.get('/', (req, res) => {
-//   db.query(`
-//     SELECT m.*, e.service_tag, u.nombre AS tecnico
-//     FROM mantenimientos m
-//     JOIN equipos e ON m.id_equipo = e.id_equipo
-//     LEFT JOIN usuarios u ON m.id_tecnico = u.id
-//   `, (err, result) => {
-//     if (err) return res.status(500).json(err);
-//     res.json(result);
-//   });
-// });
 
 // =======================
 // POST (con service_tag)
@@ -152,7 +167,7 @@ router.put('/:id/solucion', (req, res) => {
     (err) => {
       if (err) return res.status(500).json(err);
 
-      // 🔥 guardar en historial
+      // guardar en historial
       db.query(
         `INSERT INTO historial_mantenimiento (mantenimiento_id, comentario, fecha)
          VALUES (?, ?, NOW())`,
@@ -167,25 +182,6 @@ router.put('/:id/solucion', (req, res) => {
   );
 });
 
-// =======================
-// NUEVA RUTA HISTORIAL
-// =======================
-// router.get('/historial/:id_equipo', (req, res) => {
-
-//   db.query(`
-//     SELECT h.*, m.tipo, m.estado, e.service_tag, u.nombre AS tecnico
-//     FROM historial_mantenimiento h
-//     JOIN mantenimientos m ON h.mantenimiento_id = m.id_mantenimiento
-//     JOIN equipos e ON m.id_equipo = e.id_equipo
-//     LEFT JOIN usuarios u ON m.id_tecnico = u.id
-//     WHERE m.id_equipo = ?
-//     ORDER BY h.fecha DESC
-//   `, [req.params.id_equipo], (err, result) => {
-//     if (err) return res.status(500).json(err);
-//     res.json(result);
-//   });
-
-// });
 
 // =======================
 // DELETE

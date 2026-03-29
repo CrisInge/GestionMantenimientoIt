@@ -154,12 +154,10 @@ async function cargarEquipos() {
             : ""
         }
       </div>
-        
-      <!-- HISTORIAL -->
-      <div id="historial_${equipo.id_equipo}" style="display:none; margin-top:10px;"></div>
 
       <!-- FORMULARIO OCULTO -->
       <div id="edit_${equipo.id_equipo}" style="display:none; margin-top:10px;">
+      <h4>Editar datos</h4>
         <input id="dueno_${equipo.id_equipo}" value="${equipo.dueno_equipo}">
         <input id="marca_${equipo.id_equipo}" value="${equipo.marca}">
         <input id="modelo_${equipo.id_equipo}" value="${equipo.modelo}">
@@ -174,6 +172,10 @@ async function cargarEquipos() {
           Cancelar
         </button>
       </div>
+      
+      <!-- HISTORIAL -->
+      <div id="historial_${equipo.id_equipo}" style="display:none; margin-top:10px;"></div>
+
     `;
 
     lista.appendChild(li);
@@ -296,10 +298,11 @@ async function cargarMantenimientos() {
   const id_usuario = localStorage.getItem("id");
   const rol = localStorage.getItem("rol");
 
-  let url = `${API}/mantenimientos`;
+  //let url = `${API}/mantenimientos`;
+  let url = `${API}/mantenimientos?estado=Activo`;
 
   if (rol === "tecnico") {
-    url += `?id_tecnico=${id_usuario}`;
+    url += `&id_tecnico=${id_usuario}`;
   }
 
   const res = await fetch(url);
@@ -311,6 +314,9 @@ async function cargarMantenimientos() {
 
   data.forEach(m => {
     const li = document.createElement("li");
+
+    // FILTRO EXTRA (por si acaso)
+    if (m.estado !== "Activo") return;
 
     if (rol === "admin") {
       li.innerHTML = `
