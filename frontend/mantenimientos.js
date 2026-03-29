@@ -1,7 +1,7 @@
 const API = "http://localhost:3000";
 const token = localStorage.getItem("token");
 
-// 🔒 proteger
+// proteger
 if (!token) {
   window.location.href = "login.html";
 }
