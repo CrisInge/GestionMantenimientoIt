@@ -30,7 +30,7 @@ router.post('/login', (req, res) => {
         return res.status(401).json({ message: 'Contraseña incorrecta' });
       }
 
-      // 🔥 generar token
+      // generar token
       const token = jwt.sign(
         { id: user.id, rol: user.rol },
         SECRET,
@@ -38,10 +38,12 @@ router.post('/login', (req, res) => {
       );
 
       res.json({
+        message: 'Login correcto',
         token,
         rol: user.rol,
         id: user.id,
-        nombre: user.nombre
+        nombre: user.nombre,
+        correo: user.correo
       });
     }
   );

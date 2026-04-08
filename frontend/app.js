@@ -16,6 +16,33 @@ function logout() {
   localStorage.removeItem("rol");
   window.location.href = "login.html";
 }
+
+
+// Para mostrar nombre y correo en el perfil
+const nombre = localStorage.getItem("nombre");
+const correo = localStorage.getItem("correo");
+
+if (nombre) {
+  const spanNombre = document.getElementById("nombreUsuario");
+  if (spanNombre) spanNombre.textContent = nombre;
+}
+
+if (correo) {
+  const spanCorreo = document.getElementById("correoUsuario");
+  if (spanCorreo) spanCorreo.textContent = correo;
+}
+
+// PopUp del formulario de equipos
+function abrirModal() {
+  document.getElementById("modalEquipo").style.display = "flex";
+}
+
+function cerrarModal() {
+  document.getElementById("modalEquipo").style.display = "none";
+}
+
+
+
 //  Para editar
 function mostrarEditar(id) {
   const div = document.getElementById(`edit_${id}`);
@@ -47,6 +74,25 @@ if (rol === "tecnico") {
 
   // ocultar crear mantenimientos
   document.getElementById("formMantenimiento").style.display = "none";
+
+  // ocultar texto acciones
+  document.getElementById("textAcciones").style.display = "none";
+
+  // ocultar historial
+  const historial = document.getElementById("linkMantenimientos");
+  if (historial) historial.style.display = "none";
+
+  // ocultar registrar usuarios
+  const registrarUsuarios = document.getElementById("linkRegistrarUsuarios");
+  if (registrarUsuarios) registrarUsuarios.style.display = "none";
+
+  // ocultar usuarios
+  const usuarios = document.getElementById("linkUsuarios");
+  if (usuarios) usuarios.style.display = "none";
+
+  // ocultar agregar equipo btn
+  const btnAgregarEquipo = document.getElementById("agregarEquipo");
+  if (btnAgregarEquipo) btnAgregarEquipo.style.display = "none";
 
   // ocultar equipos completos
   // const contEquipos = document.getElementById("contEquipos");
@@ -139,20 +185,26 @@ async function cargarEquipos() {
 
     li.innerHTML = `
       <div class="item" onclick="toggleHistorial(${equipo.id_equipo})">
-        <span class="usuario">${equipo.dueno_equipo}</span>
-        <span class="marca">${equipo.marca}</span>
-        <span class="modelo">${equipo.modelo}</span>
-        <span class="area">${equipo.area}</span>
-        <span class="service">${equipo.service_tag}</span>
-        <span class="tecnico">${equipo.usuario_asignado}</span>
+        <div class="contSpan">
+          <span class="usuario">${equipo.dueno_equipo}</span>
+          <span class="marca">${equipo.marca}</span>
+          <span class="modelo">${equipo.modelo}</span>
+          <span class="area">${equipo.area}</span>
+          <span class="service">${equipo.service_tag}</span>
+          <span class="tecnico">${equipo.usuario_asignado}</span>
+        
         ${
           rol === "admin"
             ? `
-            <button onclick="event.stopPropagation(); mostrarEditar(${equipo.id_equipo})">Editar</button>
-            <button onclick="event.stopPropagation(); eliminarEquipo(${equipo.id_equipo})">Eliminar</button>
+            <div class="btnsAcciones">
+              <button onclick="event.stopPropagation(); mostrarEditar(${equipo.id_equipo})">Editar</button>
+              <button onclick="event.stopPropagation(); eliminarEquipo(${equipo.id_equipo})">Eliminar</button>
+            </div>
             `
             : ""
         }
+
+        </div>
       </div>
 
       <!-- FORMULARIO OCULTO -->
