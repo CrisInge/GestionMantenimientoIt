@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil de usuario</title>
+
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="perfil.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="cont">
+    <nav class="navbar">
+      <div class="triumph_logo"></div>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="perfil.html" class="active">Perfil</a></li>
+        <li><a href="usuarios.html" id="linkUsuarios">Usuarios</a></li>
+        <li><a href="register.html" id="linkRegistrarUsuarios">Registrar Usuarios</a></li>
+        <li><a href="mantenimientos.html" id="linkMantenimientos">Historial de mantenimientos</a></li>
+      </ul>
+    </nav>
+
+    <div class="contPerfil">
+      <div class="topbarPerfil">
+        <div class="InputContainer">
+          <input placeholder="Search" class="input" type="text" />
+        </div>
+
+        <div class="user-info">
+          <div class="fotoUsuario" id="miniAvatarPreview"></div>
+          <div>
+            <span id="topbarNombre">Usuario</span><br>
+            <span id="topbarCorreo">correo@admin.com</span>
+          </div>
+          <button class="btnLogout" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="perfil-grid">
+        <div class="perfil-menu">
+          <div class="menu-card active" data-section="cuenta">
+            <h3>Configuracion</h3>
+            <p>Detalles de tu información personal</p>
+          </div>
+
+          <div class="menu-card" data-section="notificaciones">
+            <h3>Notificaciones</h3>
+            <p>Configura notificaciones del sistema</p>
+          </div>
+
+          <div class="menu-card" data-section="plan">
+            <h3>Privilegios de usuario</h3>
+            <p>Tipo de cuenta y permisos</p>
+          </div>
+
+          <div class="menu-card" data-section="seguridad">
+            <h3>Seguridad</h3>
+            <p>Cambia tu contraseña de acceso</p>
+          </div>
+        </div>
+
+        <div class="perfil-contenido">
+          <div class="card photo-card">
+            <div class="photo-info">
+              <div class="avatar-preview" id="avatarPreview"></div>
+              <div class="photo-text">
+                <h3>Cambiar foto de perfil</h3>
+                <p id="photoFileName">Selecciona una imagen</p>
+              </div>
+            </div>
+
+            <div>
+              <input type="file" id="fotoPerfil" accept="image/*" hidden>
+              <button class="btn-azul" onclick="document.getElementById('fotoPerfil').click()">Agregar</button>
+            </div>
+          </div>
+
+          <div class="section-content active" id="section-cuenta">
+            <div class="card">
+              <h2>Cambiar informacion personal</h2>
+
+              <form id="formPerfil" class="profile-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Nombre Completo*</label>
+                    <input type="text" id="nombre" placeholder="Nombre completo">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Correo Electronico*</label>
+                    <input type="email" id="correo" placeholder="Correo electrónico">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group full">
+                    <label>Direccion*</label>
+                    <input type="text" id="direccion" placeholder="Dirección">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Ciudad</label>
+                    <input type="text" id="ciudad" placeholder="Ciudad">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Estado</label>
+                    <input type="text" id="estado" placeholder="Estado">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Codigo Postal</label>
+                    <input type="text" id="codigo_postal" placeholder="Código postal">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Pais</label>
+                    <input type="text" id="pais" placeholder="País">
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-azul btn-full">Update Information</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="section-content" id="section-notificaciones">
+            <div class="card">
+              <h2>Notificaciones</h2>
+
+              <div class="switch-row">
+                <span>Notificaciones por correo</span>
+                <input type="checkbox" id="notif_email">
+              </div>
+
+              <div class="switch-row">
+                <span>Notificaciones del sistema</span>
+                <input type="checkbox" id="notif_sistema">
+              </div>
+
+              <div class="switch-row">
+                <span>Alertas de mantenimiento</span>
+                <input type="checkbox" id="notif_mantenimiento">
+              </div>
+
+              <button class="btn-azul" onclick="guardarPreferencias()">Guardar preferencias</button>
+            </div>
+          </div>
+
+          <div class="section-content" id="section-plan">
+            <div class="card">
+              <h2>Rol y acceso</h2>
+              <p><strong>Rol actual:</strong> <span id="rolUsuario"></span></p>
+              <p><strong>Tipo de acceso:</strong> <span id="tipoAcceso"></span></p>
+              <p><strong>Estado:</strong> Activo</p>
+            </div>
+          </div>
+
+          <div class="section-content" id="section-seguridad">
+            <div class="card">
+              <h2>Cambiar contraseña</h2>
+
+              <form id="formPassword" class="profile-form">
+                <div class="form-row">
+                  <div class="form-group full">
+                    <label>Contraseña actual</label>
+                    <input type="password" id="password_actual">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Nueva contraseña</label>
+                    <input type="password" id="password_nueva">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Confirmar nueva contraseña</label>
+                    <input type="password" id="password_confirmar">
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-azul btn-full">Cambiar contraseña</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="perfil.js"></script>
+</body>
+</html>

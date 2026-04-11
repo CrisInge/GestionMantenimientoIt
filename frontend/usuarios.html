@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usuarios</title>
+
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="perfil.css">
+  <link rel="stylesheet" href="usuarios-page.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="cont">
+    <nav class="navbar">
+      <div class="triumph_logo"></div>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="perfil.html">Perfil</a></li>
+        <li><a href="usuarios.html" id="linkUsuarios" class="active">Usuarios</a></li>
+        <li><a href="register.html" id="linkRegistrarUsuarios">Registrar Usuarios</a></li>
+        <li><a href="mantenimientos.html" id="linkMantenimientos">Historial de mantenimientos</a></li>
+      </ul>
+    </nav>
+
+    <div class="contUsuarios">
+      <div class="topbarUsuarios">
+        <div class="InputContainer">
+          <input
+            placeholder="Buscar usuario"
+            id="busquedaUsuarios"
+            class="input"
+            type="text"
+          />
+        </div>
+
+        <div class="user-info">
+          <div class="fotoUsuario" id="fotoUsuarioTop"></div>
+          <div>
+            <span id="nombreUsuarioTop"></span><br>
+            <span id="correoUsuarioTop"></span>
+          </div>
+          <button onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="usuariosHeader">
+        <div>
+          <h1>Usuarios</h1>
+          <p>Administración general de usuarios registrados en el sistema</p>
+        </div>
+
+        <div class="usuariosAcciones">
+          <button class="btnAzul" id="btnNuevoUsuario">Agregar nuevo</button>
+          <button class="btnBlanco" id="btnExportar">Exportar</button>
+        </div>
+      </div>
+
+      <div class="usuariosResumen">
+        <div class="resumenCard">
+          <span>Total usuarios</span>
+          <strong id="totalUsuarios">0</strong>
+        </div>
+        <div class="resumenCard">
+          <span>Admins</span>
+          <strong id="totalAdmins">0</strong>
+        </div>
+        <div class="resumenCard">
+          <span>Técnicos</span>
+          <strong id="totalTecnicos">0</strong>
+        </div>
+      </div>
+
+      <div class="usuariosTablaCard">
+        <div class="usuariosTablaHeader">
+          <span>Foto</span>
+          <span>Nombre</span>
+          <span>Correo</span>
+          <span>Rol</span>
+          <span>Estado</span>
+          <span>Acciones</span>
+        </div>
+
+        <div id="usuariosLista"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="usuarios-page.js"></script>
+</body>
+</html>

@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="perfil.css">
   <title>Gestión Mantenimiento</title>
 </head>
 <body>
@@ -11,23 +12,20 @@
   <div class="cont">
 
     <nav class="navbar">
-      <div class="triumph_logo">
-        <!-- <img src="IMG/Triumph_logo.png" alt="Triumph Group" style="height: 80px; width: 200px;"> -->
-      </div>
+      <div class="triumph_logo"></div>
       <ul>
-        <li><a href="#">Perfil</a></li>
-        <li><a href="#" id="linkUsuarios">Usuarios</a></li>
-        <!-- <li><a href="#">Mantenimientos</a></li> -->
-         <li><a href="register.html" id="linkRegistrarUsuarios">Registrar Usuarios</a></li>
+        <li><a href="index.html" class="active">Inicio</a></li>
+        <li><a href="perfil.html">Perfil</a></li>
+        <li><a href="usuarios.html" id="linkUsuarios">Usuarios</a></li>
+        <li><a href="register.html" id="linkRegistrarUsuarios">Registrar Usuarios</a></li>
         <li><a href="mantenimientos.html" id="linkMantenimientos">Historial de mantenimientos</a></li>
-        
       </ul>
     </nav>
 
     
     <div class="contEquipoMant">
       
-      <div style="padding: 8px 12px;">
+      <div style=" padding: 8px 12px;">
         <!-- From Uiverse.io by Shaidend --> 
         <div class="InputContainer">
           <input
@@ -68,7 +66,7 @@
         </div>
 
       <div class="contEquipos" id="contEquipos">
-        <h1>Equipos</h1>
+        <!-- <h1>Equipos</h1> -->
         <!-- <form id="formEquipo"> -->
           <!-- <input type="text" id="marca" placeholder="Marca"> -->
           <!-- <input type="text" id="modelo" placeholder="Modelo"> -->
@@ -78,7 +76,7 @@
           <!-- <input type="text" id="usuario_asignado" placeholder="Asignar Tecnico"> -->
           <!-- <select id="usuario_asignado"></select> -->
            <div class="contBtnEquipo">
-            
+            <h1>Equipos</h1>
              <button id="agregarEquipo" onclick="abrirModal()" style="" >Agregar Nuevo Equipo</button>
              
            </div>

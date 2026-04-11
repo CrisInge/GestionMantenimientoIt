@@ -4,14 +4,31 @@
   <meta charset="UTF-8">
   <title>Todos los Mantenimientos</title>
   <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="perfil.css">
 </head>
 <body>
+  <div class="cont">
 
-  <h1>Todos los Mantenimientos</h1>
+    <!-- NAVBAR (puedes copiar la misma de index.html) -->
+    <nav class="navbar">
+      <div class="triumph_logo"></div>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="perfil.html">Perfil</a></li>
+        <li><a href="usuarios.html" id="linkUsuarios">Usuarios</a></li>
+        <li><a href="register.html" id="linkRegistrarUsuarios">Registrar Usuarios</a></li>
+        <li><a href="mantenimientos.html" id="linkMantenimientos" class="active">Historial de mantenimientos</a></li>
+      </ul>
+    </nav>
 
-  <button onclick="window.location.href='index.html'">← Volver</button>
+    <!-- CONTENIDO -->
+    <div class="contEquipoMant">
+      <h1>Todos los Mantenimientos</h1>
+      <!-- <button onclick="window.location.href='index.html'">← Volver</button> -->
+      <ul id="listaMantenimientos"></ul>
+    </div>
 
-  <ul id="listaMantenimientos"></ul>
+  </div>
 
   <script src="mantenimientos.js"></script>
 </body>

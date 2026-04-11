@@ -28,6 +28,8 @@ async function login() {
   const data = await res.json();
 
   if (data.token) {
+    localStorage.removeItem("foto_perfil");
+
     localStorage.setItem("token", data.token);
     localStorage.setItem("rol", data.rol);
     localStorage.setItem("id", data.id); 

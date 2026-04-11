@@ -1,7 +1,3 @@
-
-
-
-
 const API = "http://localhost:3000";
 const token = localStorage.getItem("token");
 const rol = localStorage.getItem("rol");
@@ -14,13 +10,29 @@ if (!token) {
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("rol");
+  localStorage.removeItem("id");
+  localStorage.removeItem("nombre");
+  localStorage.removeItem("correo");
+  localStorage.removeItem("foto_perfil");
   window.location.href = "login.html";
 }
 
+function ponerAvatar(elemento, nombre, foto) {
+  if (!elemento) return;
 
-// Para mostrar nombre y correo en el perfil
+  if (foto && foto.trim() !== "") {
+    elemento.style.backgroundImage = `url('${foto}')`;
+    elemento.textContent = "";
+  } else {
+    elemento.style.backgroundImage = "none";
+    elemento.textContent = nombre ? nombre.trim().charAt(0).toUpperCase() : "?";
+  }
+}
+
+// Para mostrar nombre, correo y foto en el perfil
 const nombre = localStorage.getItem("nombre");
 const correo = localStorage.getItem("correo");
+const fotoPerfil = localStorage.getItem("foto_perfil");
 
 if (nombre) {
   const spanNombre = document.getElementById("nombreUsuario");
@@ -32,6 +44,18 @@ if (correo) {
   if (spanCorreo) spanCorreo.textContent = correo;
 }
 
+// const foto = document.querySelector(".fotoUsuario");
+// ponerAvatar(foto, nombre, fotoPerfil);
+
+const foto = document.querySelector(".fotoUsuario");
+if (foto) {
+  if (fotoPerfil) {
+    foto.style.backgroundImage = `url('${fotoPerfil}')`;
+  } else {
+    foto.style.backgroundImage = "IMG/gohan.png";
+  }
+}
+
 // PopUp del formulario de equipos
 function abrirModal() {
   document.getElementById("modalEquipo").style.display = "flex";
@@ -41,23 +65,66 @@ function cerrarModal() {
   document.getElementById("modalEquipo").style.display = "none";
 }
 
-
-
-//  Para editar
+// Para editar
 function mostrarEditar(id) {
   const div = document.getElementById(`edit_${id}`);
 
   if (div.style.display === "none") {
     div.style.display = "block";
 
-    // obtener técnico actual desde el DOM
-    const tecnicoActual = document.querySelector(`#edit_${id} input[id^="tecnico_"]`)?.value 
+    const tecnicoActual = document.querySelector(`#edit_${id} input[id^="tecnico_"]`)?.value
       || document.querySelector(`#edit_${id}`).getAttribute("data-tecnico");
 
     cargarTecnicosEnEditar(id, tecnicoActual);
-
   } else {
     div.style.display = "none";
+  }
+}
+
+async function cargarPerfilUsuarioActual() {
+  const id = localStorage.getItem("id");
+  if (!id) return;
+
+  try {
+    const res = await fetch(`${API}/usuarios/${id}`);
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error(data.message || "No se pudo cargar el perfil");
+      return;
+    }
+
+    const spanNombre = document.getElementById("nombreUsuario");
+    const spanCorreo = document.getElementById("correoUsuario");
+    const foto = document.querySelector(".fotoUsuario");
+
+    if (spanNombre) spanNombre.textContent = data.nombre || "";
+    if (spanCorreo) spanCorreo.textContent = data.correo || "";
+
+    localStorage.setItem("nombre", data.nombre || "");
+    localStorage.setItem("correo", data.correo || "");
+
+    // if (foto) {
+    //   if (data.foto_perfil) {
+    //     foto.style.backgroundImage = `url('${data.foto_perfil}')`;
+    //     localStorage.setItem("foto_perfil", data.foto_perfil);
+    //   } else {
+    //     foto.style.backgroundImage = "none";
+    //     localStorage.removeItem("foto_perfil");
+    //   }
+    // }
+        if (foto) {
+          ponerAvatar(foto, data.nombre, data.foto_perfil);
+
+          if (data.foto_perfil && data.foto_perfil.trim() !== "") {
+            localStorage.setItem("foto_perfil", data.foto_perfil);
+          } else {
+            localStorage.removeItem("foto_perfil");
+          }
+        }
+
+  } catch (error) {
+    console.error("Error al cargar el perfil del usuario actual:", error);
   }
 }
 
@@ -68,36 +135,21 @@ function cancelarEdicion(id) {
 }
 
 if (rol === "tecnico") {
-
-  // ocultar crear equipos
   document.getElementById("formEquipo").style.display = "none";
-
-  // ocultar crear mantenimientos
   document.getElementById("formMantenimiento").style.display = "none";
-
-  // ocultar texto acciones
   document.getElementById("textAcciones").style.display = "none";
 
-  // ocultar historial
   const historial = document.getElementById("linkMantenimientos");
   if (historial) historial.style.display = "none";
 
-  // ocultar registrar usuarios
   const registrarUsuarios = document.getElementById("linkRegistrarUsuarios");
   if (registrarUsuarios) registrarUsuarios.style.display = "none";
 
-  // ocultar usuarios
   const usuarios = document.getElementById("linkUsuarios");
   if (usuarios) usuarios.style.display = "none";
 
-  // ocultar agregar equipo btn
   const btnAgregarEquipo = document.getElementById("agregarEquipo");
   if (btnAgregarEquipo) btnAgregarEquipo.style.display = "none";
-
-  // ocultar equipos completos
-  // const contEquipos = document.getElementById("contEquipos");
-  // if (contEquipos) contEquipos.style.display = "none";
-
 }
 
 if (rol !== "admin") {
@@ -111,7 +163,6 @@ async function cargarTecnicosEnEditar(id, tecnicoActual) {
   const data = await res.json();
 
   const select = document.getElementById(`tecnico_${id}`);
-
   select.innerHTML = '<option value="">Selecciona técnico</option>';
 
   data.forEach(u => {
@@ -120,7 +171,6 @@ async function cargarTecnicosEnEditar(id, tecnicoActual) {
       option.value = u.nombre;
       option.textContent = u.nombre;
 
-      // marcar seleccionado
       if (u.nombre === tecnicoActual) {
         option.selected = true;
       }
@@ -130,9 +180,7 @@ async function cargarTecnicosEnEditar(id, tecnicoActual) {
   });
 }
 
-// =======================
 // ACTUALIZAR EQUIPO
-// =======================
 async function actualizarEquipo(id) {
   const equipo = {
     dueno_equipo: document.getElementById(`dueno_${id}`).value,
@@ -155,33 +203,36 @@ async function actualizarEquipo(id) {
   cargarEquipos();
 }
 
-// =======================
 // EQUIPOS
-// =======================
-
 async function cargarEquipos() {
-  // const res = await fetch(`${API}/equipos`);
   const rol = localStorage.getItem("rol");
-  const nombre = localStorage.getItem("nombre"); // importante
+  const nombre = localStorage.getItem("nombre");
 
   let url = `${API}/equipos`;
 
   if (rol === "tecnico") {
-    url += `?tecnico=${nombre}`;
+    url += `?tecnico=${encodeURIComponent(nombre)}`;
   }
 
   const res = await fetch(url);
   const data = await res.json();
 
-
-  
   const lista = document.getElementById("listaEquipos");
   lista.innerHTML = "";
+
+  if (data.length === 0) {
+    lista.innerHTML = `
+      <p style="text-align:center; padding:20px;">
+        No tienes equipos asignados
+      </p>
+    `;
+    return;
+  }
 
   data.forEach(equipo => {
     const li = document.createElement("li");
 
-    li.dataset.id = equipo.id_equipo; // ID individual
+    li.dataset.id = equipo.id_equipo;
 
     li.innerHTML = `
       <div class="item" onclick="toggleHistorial(${equipo.id_equipo})">
@@ -192,24 +243,22 @@ async function cargarEquipos() {
           <span class="area">${equipo.area}</span>
           <span class="service">${equipo.service_tag}</span>
           <span class="tecnico">${equipo.usuario_asignado}</span>
-        
-        ${
-          rol === "admin"
-            ? `
-            <div class="btnsAcciones">
-              <button onclick="event.stopPropagation(); mostrarEditar(${equipo.id_equipo})">Editar</button>
-              <button onclick="event.stopPropagation(); eliminarEquipo(${equipo.id_equipo})">Eliminar</button>
-            </div>
-            `
-            : ""
-        }
 
+          ${
+            rol === "admin"
+              ? `
+              <div class="btnsAcciones">
+                <button onclick="event.stopPropagation(); mostrarEditar(${equipo.id_equipo})">Editar</button>
+                <button onclick="event.stopPropagation(); eliminarEquipo(${equipo.id_equipo})">Eliminar</button>
+              </div>
+              `
+              : ""
+          }
         </div>
       </div>
 
-      <!-- FORMULARIO OCULTO -->
       <div id="edit_${equipo.id_equipo}" style="display:none; margin-top:10px;">
-      <h4>Editar datos</h4>
+        <h4>Editar datos</h4>
         <input id="dueno_${equipo.id_equipo}" value="${equipo.dueno_equipo}">
         <input id="marca_${equipo.id_equipo}" value="${equipo.marca}">
         <input id="modelo_${equipo.id_equipo}" value="${equipo.modelo}">
@@ -217,19 +266,12 @@ async function cargarEquipos() {
         <input id="area_${equipo.id_equipo}" value="${equipo.area}">
         <select id="tecnico_${equipo.id_equipo}"></select>
 
-        <button onclick="actualizarEquipo(${equipo.id_equipo})">
-          Guardar
-        </button>
-        <button onclick="cancelarEdicion(${equipo.id_equipo})">
-          Cancelar
-        </button>
+        <button onclick="actualizarEquipo(${equipo.id_equipo})">Guardar</button>
+        <button onclick="cancelarEdicion(${equipo.id_equipo})">Cancelar</button>
       </div>
-      
-      <!-- HISTORIAL -->
-      <div id="historial_${equipo.id_equipo}" style="display:none; margin-top:10px;"></div>
 
+      <div id="historial_${equipo.id_equipo}" style="display:none; cursor: none; margin:10px 0 25px 0;"></div>
     `;
-
     lista.appendChild(li);
   });
 }
@@ -266,10 +308,7 @@ async function eliminarEquipo(id) {
   cargarEquipos();
 }
 
-// =======================
 // SELECT DINÁMICO
-// =======================
-
 async function cargarEquiposSelect() {
   const res = await fetch(`${API}/equipos`);
   const data = await res.json();
@@ -285,13 +324,10 @@ async function cargarEquiposSelect() {
   });
 }
 
-// =======================
 // HISTORIAL POR EQUIPO
-// =======================
 async function toggleHistorial(id_equipo) {
   const div = document.getElementById(`historial_${id_equipo}`);
 
-  // mostrar / ocultar
   if (div.style.display === "block") {
     div.style.display = "none";
     return;
@@ -299,8 +335,6 @@ async function toggleHistorial(id_equipo) {
 
   div.style.display = "block";
 
-  // cargar historial
-  // const res = await fetch(`${API}/mantenimientos?id_equipo=${id_equipo}`);
   const res = await fetch(`${API}/mantenimientos/historial/${id_equipo}`);
   const data = await res.json();
 
@@ -320,37 +354,29 @@ async function toggleHistorial(id_equipo) {
   });
 }
 
-// =======================
 // CARGAR TECNICOS EN MANTENIMIENTO
-// =======================
 async function cargarTecnicosMant() {
   const res = await fetch(`${API}/usuarios`);
   const data = await res.json();
 
   const select = document.getElementById("tecnico_mant");
-
   select.innerHTML = '<option value="">Selecciona técnico</option>';
 
   data.forEach(u => {
     if (u.rol === "tecnico") {
       const option = document.createElement("option");
-      option.value = u.id; //IMPORTANTE
+      option.value = u.id;
       option.textContent = u.nombre;
       select.appendChild(option);
     }
   });
 }
 
-// =======================
 // MANTENIMIENTOS
-// =======================
-
 async function cargarMantenimientos() {
-  // const res = await fetch(`${API}/mantenimientos`);
   const id_usuario = localStorage.getItem("id");
   const rol = localStorage.getItem("rol");
 
-  //let url = `${API}/mantenimientos`;
   let url = `${API}/mantenimientos?estado=Activo`;
 
   if (rol === "tecnico") {
@@ -358,16 +384,23 @@ async function cargarMantenimientos() {
   }
 
   const res = await fetch(url);
-
   const data = await res.json();
 
   const lista = document.getElementById("listaMantenimientos");
   lista.innerHTML = "";
 
+  if (data.length === 0) {
+    lista.innerHTML = `
+      <h3 style="text-align:center; padding:50px 20px 20px 20px; color: gray;">
+        Aun no tienes mantenimientos asignados
+      </h3>
+    `;
+    return;
+  }
+
   data.forEach(m => {
     const li = document.createElement("li");
 
-    // FILTRO EXTRA (por si acaso)
     if (m.estado !== "Activo") return;
 
     if (rol === "admin") {
@@ -378,58 +411,38 @@ async function cargarMantenimientos() {
           <span>Estado: ${m.estado}</span>
           <span>Técnico: ${m.tecnico || "Sin asignar"}</span>
 
-          <button onclick="terminarMantenimiento(${m.id_mantenimiento})">
-            Terminar
-          </button>
-
-          <button onclick="eliminarMantenimiento(${m.id_mantenimiento})">
-            Eliminar
-          </button>
+          <button onclick="terminarMantenimiento(${m.id_mantenimiento})">Terminar</button>
+          <button onclick="eliminarMantenimiento(${m.id_mantenimiento})">Eliminar</button>
         </div>
       `;
     } else {
-      // TECNICO
-      if (m.estado === "Activo") {
-        li.innerHTML = `
-          <div class="item">
-            <span>Service Tag: ${m.service_tag}</span>
-            <span>Tipo: ${m.tipo}</span>
-            <span>Estado: ${m.estado}</span>
-            <span>Técnico: ${m.tecnico || "Sin asignar"}</span>
+      li.innerHTML = `
+        <div class="item">
+          <span>Service Tag: ${m.service_tag}</span>
+          <span>Tipo: ${m.tipo}</span>
+          <span>Estado: ${m.estado}</span>
+          <span>Técnico: ${m.tecnico || "Sin asignar"}</span>
 
-            <input id="solucion_${m.id_mantenimiento}" placeholder="Escribir solución">
-
-            <button onclick="agregarSolucion(${m.id_mantenimiento})">
-              Guardar solución
-            </button>
-          </div>
-        `;
-      } else {
-        li.innerHTML = `
-          <div class="item">
-            <span>Service Tag: ${m.service_tag}</span>
-            <span>Tipo: ${m.tipo}</span>
-            <span>Estado: ${m.estado}</span>
-            <span>Técnico: ${m.tecnico || "Sin asignar"}</span>
-            
-          </div>
-        `;
-      }
+          <input id="solucion_${m.id_mantenimiento}" placeholder="Escribir solución">
+          <button onclick="agregarSolucion(${m.id_mantenimiento})">Guardar solución</button>
+        </div>
+      `;
     }
 
     lista.appendChild(li);
   });
 }
+
 // Crear mantenimiento
 document.getElementById("formMantenimiento").addEventListener("submit", async e => {
   e.preventDefault();
 
   const mantenimiento = {
-  service_tag: document.getElementById("service_tag_mant").value,
-  tipo: document.getElementById("tipo").value,
-  descripcion: document.getElementById("descripcion").value,
-  id_tecnico: document.getElementById("tecnico_mant").value
-};
+    service_tag: document.getElementById("service_tag_mant").value,
+    tipo: document.getElementById("tipo").value,
+    descripcion: document.getElementById("descripcion").value,
+    id_tecnico: document.getElementById("tecnico_mant").value
+  };
 
   await fetch(`${API}/mantenimientos`, {
     method: "POST",
@@ -459,30 +472,25 @@ async function terminarMantenimiento(id) {
   cargarMantenimientos();
 }
 
-// =======================
 // CARGAR TECNICOS
-// =======================
 async function cargarTecnicos() {
   const res = await fetch(`${API}/usuarios`);
   const data = await res.json();
 
   const select = document.getElementById("usuario_asignado");
-
   select.innerHTML = '<option value="">Selecciona un técnico</option>';
 
   data.forEach(u => {
     if (u.rol === "tecnico") {
       const option = document.createElement("option");
-      option.value = u.nombre; // puedes usar ID después
+      option.value = u.nombre;
       option.textContent = u.nombre;
       select.appendChild(option);
     }
   });
 }
 
-// =======================
-// AGREGAR SOLUCIÓN (TECNICO)
-// =======================
+// AGREGAR SOLUCIÓN
 async function agregarSolucion(id) {
   const solucion = document.getElementById(`solucion_${id}`).value;
 
@@ -498,12 +506,10 @@ async function agregarSolucion(id) {
   cargarMantenimientos();
 }
 
-// =======================
 // INICIALIZAR
-// =======================
-
 cargarEquipos();
 cargarMantenimientos();
 cargarEquiposSelect();
 cargarTecnicos();
 cargarTecnicosMant();
+cargarPerfilUsuarioActual();
