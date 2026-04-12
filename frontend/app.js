@@ -234,44 +234,84 @@ async function cargarEquipos() {
 
     li.dataset.id = equipo.id_equipo;
 
+    // li.innerHTML = `
+    //   <div class="item" onclick="toggleHistorial(${equipo.id_equipo})">
+    //     <div class="contSpan">
+    //       <span class="usuario">${equipo.dueno_equipo}</span>
+    //       <span class="marca">${equipo.marca}</span>
+    //       <span class="modelo">${equipo.modelo}</span>
+    //       <span class="area">${equipo.area}</span>
+    //       <span class="service">${equipo.service_tag}</span>
+    //       <span class="tecnico">${equipo.usuario_asignado}</span>
+
+    //       ${
+    //         rol === "admin"
+    //           ? `
+    //           <div class="btnsAcciones">
+    //             <button onclick="event.stopPropagation(); mostrarEditar(${equipo.id_equipo})">Editar</button>
+    //             <button onclick="event.stopPropagation(); eliminarEquipo(${equipo.id_equipo})">Eliminar</button>
+    //           </div>
+    //           `
+    //           : ""
+    //       }
+    //     </div>
+    //   </div>
+
+    //   <div id="edit_${equipo.id_equipo}" style="display:none; margin-top:10px;">
+    //     <h4>Editar datos</h4>
+    //     <input id="dueno_${equipo.id_equipo}" value="${equipo.dueno_equipo}">
+    //     <input id="marca_${equipo.id_equipo}" value="${equipo.marca}">
+    //     <input id="modelo_${equipo.id_equipo}" value="${equipo.modelo}">
+    //     <input id="service_${equipo.id_equipo}" value="${equipo.service_tag}">
+    //     <input id="area_${equipo.id_equipo}" value="${equipo.area}">
+    //     <select id="tecnico_${equipo.id_equipo}"></select>
+
+    //     <button onclick="actualizarEquipo(${equipo.id_equipo})">Guardar</button>
+    //     <button onclick="cancelarEdicion(${equipo.id_equipo})">Cancelar</button>
+    //   </div>
+
+    //   <div id="historial_${equipo.id_equipo}" style="display:none; cursor: none; margin:10px 0 25px 0;"></div>
+    // `;
+
+
     li.innerHTML = `
-      <div class="item" onclick="toggleHistorial(${equipo.id_equipo})">
-        <div class="contSpan">
-          <span class="usuario">${equipo.dueno_equipo}</span>
-          <span class="marca">${equipo.marca}</span>
-          <span class="modelo">${equipo.modelo}</span>
-          <span class="area">${equipo.area}</span>
-          <span class="service">${equipo.service_tag}</span>
-          <span class="tecnico">${equipo.usuario_asignado}</span>
+  <div class="item">
+    <div class="contSpan" onclick="toggleHistorial(${equipo.id_equipo})">
+      <span class="usuario">${equipo.dueno_equipo}</span>
+      <span class="marca">${equipo.marca}</span>
+      <span class="modelo">${equipo.modelo}</span>
+      <span class="area">${equipo.area}</span>
+      <span class="service">${equipo.service_tag}</span>
+      <span class="tecnico">${equipo.usuario_asignado || "Sin asignar"}</span>
 
-          ${
-            rol === "admin"
-              ? `
-              <div class="btnsAcciones">
-                <button onclick="event.stopPropagation(); mostrarEditar(${equipo.id_equipo})">Editar</button>
-                <button onclick="event.stopPropagation(); eliminarEquipo(${equipo.id_equipo})">Eliminar</button>
-              </div>
-              `
-              : ""
-          }
-        </div>
-      </div>
+      ${
+        rol === "admin"
+          ? `
+          <div class="btnsAcciones">
+            <button onclick="event.stopPropagation(); mostrarEditar(${equipo.id_equipo})">Editar</button>
+            <button onclick="event.stopPropagation(); eliminarEquipo(${equipo.id_equipo})">Eliminar</button>
+          </div>
+          `
+          : `<div></div>`
+      }
+    </div>
+  </div>
 
-      <div id="edit_${equipo.id_equipo}" style="display:none; margin-top:10px;">
-        <h4>Editar datos</h4>
-        <input id="dueno_${equipo.id_equipo}" value="${equipo.dueno_equipo}">
-        <input id="marca_${equipo.id_equipo}" value="${equipo.marca}">
-        <input id="modelo_${equipo.id_equipo}" value="${equipo.modelo}">
-        <input id="service_${equipo.id_equipo}" value="${equipo.service_tag}">
-        <input id="area_${equipo.id_equipo}" value="${equipo.area}">
-        <select id="tecnico_${equipo.id_equipo}"></select>
+  <div id="edit_${equipo.id_equipo}" style="display:none;">
+    <h4>Editar datos</h4>
+    <input id="dueno_${equipo.id_equipo}" value="${equipo.dueno_equipo}">
+    <input id="marca_${equipo.id_equipo}" value="${equipo.marca}">
+    <input id="modelo_${equipo.id_equipo}" value="${equipo.modelo}">
+    <input id="service_${equipo.id_equipo}" value="${equipo.service_tag}">
+    <input id="area_${equipo.id_equipo}" value="${equipo.area}">
+    <select id="tecnico_${equipo.id_equipo}"></select>
 
-        <button onclick="actualizarEquipo(${equipo.id_equipo})">Guardar</button>
-        <button onclick="cancelarEdicion(${equipo.id_equipo})">Cancelar</button>
-      </div>
+    <button onclick="actualizarEquipo(${equipo.id_equipo})">Guardar</button>
+    <button onclick="cancelarEdicion(${equipo.id_equipo})">Cancelar</button>
+  </div>
 
-      <div id="historial_${equipo.id_equipo}" style="display:none; cursor: none; margin:10px 0 25px 0;"></div>
-    `;
+  <div id="historial_${equipo.id_equipo}" style="display:none;"></div>
+`;
     lista.appendChild(li);
   });
 }
@@ -340,15 +380,20 @@ async function toggleHistorial(id_equipo) {
 
   div.innerHTML = "<h4>Historial</h4>";
 
+  if (data.length === 0) {
+    div.innerHTML += `<p style="color:#666;">Este equipo no tiene historial todavía.</p>`;
+    return;
+  }
+
   data.forEach(m => {
     div.innerHTML += `
-      <div class="item" style="background:#f5f5f5; margin:5px; padding:5px;">
-        <span>Tipo: ${m.tipo}</span>
-        <span>Estado: ${m.estado}</span>
-        <span>Técnico: ${m.tecnico || "Sin asignar"}</span>
-        <span>Inicio: ${m.fecha_inicio ? new Date(m.fecha_inicio).toLocaleString() : "Sin fecha"}</span>
-        <span>Fin: ${m.fecha_fin ? new Date(m.fecha_fin).toLocaleString() : "En proceso"}</span>
-        <span>Solución: ${m.comentario || "Sin solución"}</span>
+      <div class="item">
+        <span><strong>Tipo:</strong> ${m.tipo}</span>
+        <span><strong>Estado:</strong> ${m.estado}</span>
+        <span><strong>Técnico:</strong> ${m.tecnico || "Sin asignar"}</span>
+        <span><strong>Inicio:</strong> ${m.fecha_inicio ? new Date(m.fecha_inicio).toLocaleString() : "Sin fecha"}</span>
+        <span><strong>Fin:</strong> ${m.fecha_fin ? new Date(m.fecha_fin).toLocaleString() : "En proceso"}</span>
+        <span><strong>Solución:</strong> ${m.comentario || "Sin solución"}</span>
       </div>
     `;
   });
@@ -387,15 +432,25 @@ async function cargarMantenimientos() {
   const data = await res.json();
 
   const lista = document.getElementById("listaMantenimientos");
+  const tabla = document.getElementById("mantenimientosTableCard");
+  const vacio = document.getElementById("mantenimientosVacio");
+  const formCard = document.getElementById("maintenanceFormCard");
+
   lista.innerHTML = "";
 
+  // 🔥 el técnico nunca debe ver el formulario
+  if (formCard) {
+    formCard.style.display = rol === "tecnico" ? "none" : "block";
+  }
+
+  // si no hay mantenimientos
   if (data.length === 0) {
-    lista.innerHTML = `
-      <h3 style="text-align:center; padding:50px 20px 20px 20px; color: gray;">
-        Aun no tienes mantenimientos asignados
-      </h3>
-    `;
+    if (tabla) tabla.style.display = "none";
+    if (vacio) vacio.style.display = "block";
     return;
+  } else {
+    if (tabla) tabla.style.display = "block";
+    if (vacio) vacio.style.display = "none";
   }
 
   data.forEach(m => {
@@ -406,25 +461,27 @@ async function cargarMantenimientos() {
     if (rol === "admin") {
       li.innerHTML = `
         <div class="item">
-          <span>Service Tag: ${m.service_tag}</span>
-          <span>Tipo: ${m.tipo}</span>
-          <span>Estado: ${m.estado}</span>
-          <span>Técnico: ${m.tecnico || "Sin asignar"}</span>
-
-          <button onclick="terminarMantenimiento(${m.id_mantenimiento})">Terminar</button>
-          <button onclick="eliminarMantenimiento(${m.id_mantenimiento})">Eliminar</button>
+          <span>${m.service_tag}</span>
+          <span>${m.tipo}</span>
+          <span>${m.estado}</span>
+          <span>${m.tecnico || "Sin asignar"}</span>
+          <div>
+            <button onclick="terminarMantenimiento(${m.id_mantenimiento})">Terminar</button>
+            <button onclick="eliminarMantenimiento(${m.id_mantenimiento})">Eliminar</button>
+          </div>
         </div>
       `;
     } else {
       li.innerHTML = `
         <div class="item">
-          <span>Service Tag: ${m.service_tag}</span>
-          <span>Tipo: ${m.tipo}</span>
-          <span>Estado: ${m.estado}</span>
-          <span>Técnico: ${m.tecnico || "Sin asignar"}</span>
-
-          <input id="solucion_${m.id_mantenimiento}" placeholder="Escribir solución">
-          <button onclick="agregarSolucion(${m.id_mantenimiento})">Guardar solución</button>
+          <span>${m.service_tag}</span>
+          <span>${m.tipo}</span>
+          <span>${m.estado}</span>
+          <span>${m.tecnico || "Sin asignar"}</span>
+          <div>
+            <input id="solucion_${m.id_mantenimiento}" placeholder="Escribir solución">
+            <button onclick="agregarSolucion(${m.id_mantenimiento})">Guardar solución</button>
+          </div>
         </div>
       `;
     }
@@ -432,6 +489,107 @@ async function cargarMantenimientos() {
     lista.appendChild(li);
   });
 }
+
+// async function cargarMantenimientos() {
+//   const id_usuario = localStorage.getItem("id");
+//   const rol = localStorage.getItem("rol");
+
+//   let url = `${API}/mantenimientos?estado=Activo`;
+
+//   if (rol === "tecnico") {
+//     url += `&id_tecnico=${id_usuario}`;
+//   }
+
+//   const res = await fetch(url);
+//   const data = await res.json();
+
+//   // const lista = document.getElementById("listaMantenimientos");
+//   // lista.innerHTML = "";
+
+//   // if (data.length === 0) {
+//   //   lista.innerHTML = `
+//   //     <h3 style="text-align:center; padding:50px 20px 20px 20px; color: gray;">
+//   //       Aun no tienes mantenimientos asignados
+//   //     </h3>
+//   //   `;
+//   //   return;
+//   // }
+
+//   const lista = document.getElementById("listaMantenimientos");
+//   const tabla = document.getElementById("mantenimientosTableCard");
+//   const vacio = document.getElementById("mantenimientosVacio");
+
+//   lista.innerHTML = "";
+
+//   const formCard = document.getElementById("maintenanceFormCard");
+
+//   if (rol === "tecnico") {
+//     if (formCard) formCard.style.display = "none";
+//   } else {
+//     if (formCard) formCard.style.display = "block";
+//   }
+
+//   if (data.length === 0) {
+//     if (tabla) tabla.style.display = "none";
+//     if (vacio) vacio.style.display = "block";
+
+//     // AQUÍ LA DIFERENCIA
+//     if (formCard) {
+//       if (rol === "admin") {
+//         formCard.style.display = "block"; // admin sí puede agregar
+//       } else {
+//         formCard.style.display = "none";  // técnico no
+//       }
+//     }
+
+//     return;
+//   } else {
+//     if (tabla) tabla.style.display = "block";
+//     if (vacio) vacio.style.display = "none";
+
+//     if (formCard) formCard.style.display = "block";
+//   }
+
+
+
+
+
+//   data.forEach(m => {
+//     const li = document.createElement("li");
+
+//     if (m.estado !== "Activo") return;
+
+//     if (rol === "admin") {
+//       li.innerHTML = `
+//         <div class="item">
+//           <span>${m.service_tag}</span>
+//           <span>${m.tipo}</span>
+//           <span>${m.estado}</span>
+//           <span>${m.tecnico || "Sin asignar"}</span>
+//           <div>
+//             <button onclick="terminarMantenimiento(${m.id_mantenimiento})">Terminar</button>
+//             <button onclick="eliminarMantenimiento(${m.id_mantenimiento})">Eliminar</button>
+//           </div>
+//         </div>
+//       `;
+//     } else {
+//       li.innerHTML = `
+//         <div class="item">
+//           <span>${m.service_tag}</span>
+//           <span>${m.tipo}</span>
+//           <span>${m.estado}</span>
+//           <span>${m.tecnico || "Sin asignar"}</span>
+//           <div>
+//             <input id="solucion_${m.id_mantenimiento}" placeholder="Escribir solución">
+//             <button onclick="agregarSolucion(${m.id_mantenimiento})">Guardar solución</button>
+//           </div>
+//         </div>
+//       `;
+//     }
+
+//     lista.appendChild(li);
+//   });
+// }
 
 // Crear mantenimiento
 document.getElementById("formMantenimiento").addEventListener("submit", async e => {

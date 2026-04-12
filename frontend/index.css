@@ -106,10 +106,12 @@ a {
 
 .contEquipoMant {
     margin-left: 20%;
+    /* margin-bottom: 20px; */
     width: calc(100% - 20%);
     height: 100vh;
     overflow-y: auto;
     padding: 20px 40px;
+    padding-bottom: 100px;
 }
 
 .contEquipos {
@@ -415,4 +417,350 @@ button {
 }
 
 /* --------------------------------- */
+
+/* ============================= */
+/* HOME REDISEÑO TABLAS */
+/* ============================= */
+
+.dashboardHome {
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+    margin-top: 60px;
+}
+
+.homeSection {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 0 20px;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.sectionHeader h1 {
+    font-size: 32px;
+    margin: 0;
+    line-height: 1;
+}
+
+.sectionHeader p {
+    margin-top: 8px;
+    color: #666;
+    font-size: 16px;
+}
+
+.tableCard {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.tableBodyList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tableHeader {
+    display: grid;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    background: #fafafa;
+    border-bottom: 1px solid #ececec;
+    font-weight: bold;
+    color: #555;
+}
+
+.equiposGridHeader {
+    grid-template-columns: 1.3fr 1fr 1fr 0.8fr 1fr 1fr 140px;
+}
+
+.mantenimientosGridHeader {
+    grid-template-columns: 1.2fr 1fr 1fr 1.2fr 180px;
+}
+
+#listaEquipos li,
+#listaMantenimientos li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* fila visual de tablas */
+#listaEquipos .item,
+#listaMantenimientos .item {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    margin-bottom: 0;
+    padding: 16px 22px;
+    border-bottom: 1px solid #efefef;
+    cursor: default;
+}
+
+#listaEquipos li:last-child .item,
+#listaMantenimientos li:last-child .item {
+    border-bottom: none;
+}
+
+#listaEquipos .item:hover,
+#listaMantenimientos .item:hover {
+    background: #fcfcfc;
+}
+
+/* EQUIPOS */
+#listaEquipos .item {
+    padding: 0;
+}
+
+#listaEquipos .item > .contSpan {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 0.8fr 1fr 1fr 140px;
+    gap: 14px;
+    align-items: center;
+    width: 100%;
+    padding: 16px 22px;
+    cursor: pointer;
+}
+
+#listaEquipos .usuario,
+#listaEquipos .marca,
+#listaEquipos .modelo,
+#listaEquipos .area,
+#listaEquipos .service,
+#listaEquipos .tecnico {
+    width: auto;
+    text-align: left;
+    display: block;
+    color: #222;
+    word-break: break-word;
+}
+
+#listaEquipos .usuario {
+    font-weight: bold;
+}
+
+.btnsAcciones {
+    width: auto;
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    text-align: left;
+}
+
+.btnsAcciones button {
+    padding: 8px 12px;
+}
+
+/* editar equipo */
+#listaEquipos [id^="edit_"] {
+    background: #fafafa;
+    border-top: 1px solid #ececec;
+    padding: 18px 22px 22px;
+    display: none;
+}
+
+#listaEquipos [id^="edit_"] h4 {
+    margin-bottom: 14px;
+    font-size: 18px;
+}
+
+#listaEquipos [id^="edit_"] input,
+#listaEquipos [id^="edit_"] select {
+    width: 100%;
+    height: 42px;
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
+    padding: 0 12px;
+    margin-bottom: 10px;
+    background: white;
+}
+
+#listaEquipos [id^="edit_"] button {
+    margin-right: 8px;
+}
+
+/* historial debajo del equipo */
+#listaEquipos [id^="historial_"] {
+    background: #f8f8f8;
+    border-top: 1px solid #ececec;
+    padding: 18px 22px 22px;
+}
+
+#listaEquipos [id^="historial_"] h4 {
+    margin-bottom: 14px;
+    font-size: 18px;
+    color: #222;
+}
+
+#listaEquipos [id^="historial_"] .item {
+    background: white !important;
+    border: 1px solid #ececec;
+    border-radius: 12px;
+    padding: 14px 16px !important;
+    margin-bottom: 10px;
+    box-shadow: none;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+}
+
+#listaEquipos [id^="historial_"] .item span {
+    font-size: 14px;
+    color: #444;
+}
+
+/* MANTENIMIENTOS */
+.maintenanceFormCard {
+    background: white;
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.08);
+}
+
+.formMantenimientoGrid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.2fr 1.2fr 150px;
+    gap: 12px;
+    align-items: center;
+}
+
+.formMantenimientoGrid select,
+.formMantenimientoGrid input {
+    width: 100%;
+    height: 42px;
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
+    padding: 0 12px;
+    outline: none;
+    background: white;
+}
+
+.formMantenimientoGrid button {
+    height: 42px;
+}
+
+#listaMantenimientos .item {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1.2fr 180px;
+    gap: 14px;
+    align-items: center;
+}
+
+#listaMantenimientos .item span {
+    color: #222;
+    word-break: break-word;
+}
+
+#listaMantenimientos .item input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
+    padding: 0 12px;
+    outline: none;
+}
+
+#listaMantenimientos .item button {
+    padding: 8px 12px;
+    margin-right: 6px;
+}
+
+/* mejora topbar */
+.contEquipoMant > div:first-child {
+    padding: 0 !important;
+    /* margin-bottom: 50px; */
+}
+
+.contEquipoMant .InputContainer {
+    width: calc(100% - 360px);
+    min-width: 280px;
+}
+
+/* responsive */
+@media (max-width: 1300px) {
+    .equiposGridHeader,
+    #listaEquipos .item > .contSpan {
+        grid-template-columns: 1.2fr 1fr 1fr 0.8fr 1fr 1fr 120px;
+    }
+
+    .mantenimientosGridHeader,
+    #listaMantenimientos .item {
+        grid-template-columns: 1fr 1fr 1fr 1fr 180px;
+    }
+
+    .formMantenimientoGrid {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    .formMantenimientoGrid button {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 1100px) {
+    .sectionHeader {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .equiposGridHeader,
+    .mantenimientosGridHeader {
+        display: none;
+    }
+
+    #listaEquipos .item > .contSpan,
+    #listaMantenimientos .item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    #listaEquipos [id^="historial_"] .item {
+        grid-template-columns: 1fr;
+    }
+
+    .contEquipoMant .InputContainer {
+        width: 100%;
+    }
+
+    .user-info {
+        position: static;
+        margin-right: 0;
+        margin-top: 16px;
+    }
+
+    .contBtnEquipo {
+        flex-direction: column;
+        gap: 14px;
+        align-items: stretch;
+    }
+}
  
+/* ------------------------------------------------------------------- */
+
+
+.emptyStateCard {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.08);
+    padding: 40px 24px;
+    text-align: center;
+    color: #666;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+.searchContainer {
+    margin: 8px 12px;
+    /* padding: 8px 12px; */
+}

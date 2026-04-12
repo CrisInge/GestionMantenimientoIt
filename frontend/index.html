@@ -1,172 +1,206 @@
 
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="index.css">
-  <link rel="stylesheet" href="perfil.css">
-  <title>Gestión Mantenimiento</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <div class="cont">
+    <title>Gestión Mantenimiento</title>
+  </head>
+  <body>
 
-    <nav class="navbar">
-      <div class="triumph_logo"></div>
-      <ul>
-        <li><a href="index.html" class="active">Inicio</a></li>
-        <li><a href="perfil.html">Perfil</a></li>
-        <li><a href="usuarios.html" id="linkUsuarios">Usuarios</a></li>
-        <li><a href="register.html" id="linkRegistrarUsuarios">Registrar Usuarios</a></li>
-        <li><a href="mantenimientos.html" id="linkMantenimientos">Historial de mantenimientos</a></li>
-      </ul>
-    </nav>
+    <div class="cont">
 
-    
-    <div class="contEquipoMant">
+      <nav class="navbar">
+        <div class="triumph_logo"></div>
+        <ul>
+          <li><a href="index.html" class="active">Inicio</a></li>
+          <li><a href="perfil.html">Perfil</a></li>
+          <li><a href="usuarios.html" id="linkUsuarios">Usuarios</a></li>
+          <li><a href="register.html" id="linkRegistrarUsuarios">Registrar Usuarios</a></li>
+          <li><a href="mantenimientos.html" id="linkMantenimientos">Historial de mantenimientos</a></li>
+        </ul>
+      </nav>
+
       
-      <div style=" padding: 8px 12px;">
-        <!-- From Uiverse.io by Shaidend --> 
-        <div class="InputContainer">
-          <input
-          placeholder="Search"
-          id="input"
-          class="input"
-          name="text"
-          type="text"
-          />
-          
-          <label class="labelforsearch" for="input">
-            <svg class="searchIcon" viewBox="0 0 512 512">
-                <path
-                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
-                ></path>
+      <div class="contEquipoMant">
+        
+        <div style="padding: 8px 12px;">
+          <div class="InputContainer">
+            <input
+            placeholder="Search"
+            id="input"
+            class="input"
+            name="text"
+            type="text"
+            />
+            
+            <label class="labelforsearch" for="input">
+              <svg class="searchIcon" viewBox="0 0 512 512">
+                  <path
+                  d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+                  ></path>
+              </svg>
+            </label>
+          </div>
+          <!-- <div class="InputContainer">
+            <input placeholder="Search" class="input" type="text" />
+          </div> -->
+
+          <div class="user-info">
+            <div class="fotoUsuario" id="miniAvatarPreview"></div>
+            <div>
+              <span id="topbarNombre" style="font-weight: bold; font-size: 14px; font-family: inter, sans-serif;">Usuario</span><br>
+              <span id="topbarCorreo" style="font-family: inter, sans-serif; font-size: 12px;">correo@admin.com</span>
+            </div>
+            <button class="btnLogout" onclick="logout()">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- <div class="searchContainer">
+          <div class="InputContainer">
+            <input
+            placeholder="Search"
+            id="input"
+            class="input"
+            name="text"
+            type="text"
+            />
+            
+            <label class="labelforsearch" for="input">
+              <svg class="searchIcon" viewBox="0 0 512 512">
+                  <path
+                  d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+                  ></path>
               </svg>
             </label>
           </div>
         
-        <div class="user-menu">
-          </div>
+
           <div class="user-info">
-            <!-- <img id="fotoUsuario" src="https://i.pravatar.cc/40" alt="foto"> -->
-            <div class="fotoUsuario"></div> 
-            
+          
+            <div class="fotoUsuario" id="miniAvatarPreview"></div>
             <div>
-              <span id="nombreUsuario"></span><br>
-              <span id="correoUsuario"></span>
+              <span id="nombreUsuario">Usuario</span><br>
+              <span id="correoUsuario">correo@gmail.com</span>
             </div>
-            <button onclick="logout()">
-              <i data-lucide="log-out" style="width: 20px; height: 16px;"></i>
+            <button class="btnLogout" onclick="logout()">
+              <i class="fa-solid fa-right-from-bracket"></i>
             </button>
-            <!-- <div class="dropdown" id="dropdownMenu">
-              <button id="logoutBtn">Cerrar sesión</button>
-            </div> -->
 
           </div>
-        </div>
-
-      <div class="contEquipos" id="contEquipos">
-        <!-- <h1>Equipos</h1> -->
-        <!-- <form id="formEquipo"> -->
-          <!-- <input type="text" id="marca" placeholder="Marca"> -->
-          <!-- <input type="text" id="modelo" placeholder="Modelo"> -->
-          <!-- <input type="text" id="service_tag" placeholder="Service Tag"> -->
-          <!-- <input type="text" id="dueno_equipo" placeholder="Nombre del usuario" required> -->
-          <!-- <input type="text" id="area" placeholder="Area"> -->
-          <!-- <input type="text" id="usuario_asignado" placeholder="Asignar Tecnico"> -->
-          <!-- <select id="usuario_asignado"></select> -->
-           <div class="contBtnEquipo">
-            <h1>Equipos</h1>
-             <button id="agregarEquipo" onclick="abrirModal()" style="" >Agregar Nuevo Equipo</button>
-             
-           </div>
-          <!-- <button type="submit">Agregar</button> -->
-        <!-- </form> -->
-
-        <div class="datosEquipo">
-          <!-- <div style="display: flex;"> -->
-            <h3>Usuario</h3>
-            <h3>Marca</h3>
-            <h3>Modelo</h3>
-            <h3>Area</h3>
-            <h3>Service Tag</h3>
-            <h3>Tecnico</h3>
-            <h3 id="textAcciones" class="textAcciones">Acciones</h3>
-          <!-- </div> -->
-          <!-- <div class="btnAcciones"> -->
-          <!-- </div> -->
-        </div>
-        <ul id="listaEquipos"></ul>
-      </div>
-    
-      <div class="contMantenimiento">
-        <h1>Mantenimientos</h1>
-        
-      
-        <!-- <form id="formMantenimiento">
-          <input type="text" id="service_tag_mant" placeholder="Service Tag" required>
-
-          <select id="tipo">
-            <option value="preventivo">Preventivo</option>
-            <option value="correctivo">Correctivo</option>
-          </select>
-
-          <input type="text" id="descripcion" placeholder="Descripción">
-
-          <button type="submit">Agregar</button>
-        </form> -->
-
-
-        <form id="formMantenimiento">
-          <!-- <input type="text" id="service_tag_mant" placeholder="Service Tag" required> -->
-          <select id="service_tag_mant" required>
-            <option value="">Selecciona un equipo</option>
-          </select>
-
-          <select id="tipo">
-            <option value="Preventivo">Preventivo</option>
-            <option value="Correctivo">Correctivo</option>
-          </select>
-
-          <input type="text" id="descripcion" placeholder="Descripción">
-
-          <select id="tecnico_mant"></select>
           
-          <button type="submit">Agregar</button>
-        </form>
+        </div> -->
 
-        <ul id="listaMantenimientos"></ul>
-      </div>
+    
+        <div class="dashboardHome">
 
-    </div>
-  </div>
+          <!-- EQUIPOS -->
+          <section class="homeSection" id="contEquipos">
 
-  <!-- MODAL -->
-  <div id="modalEquipo" class="modal">
-    <div class="modal-content">
+            <div class="sectionHeader">
+              <div>
+                <h1>Equipos</h1>
+                <p>Administración general de equipos registrados</p>
+              </div>
+              <button id="agregarEquipo" onclick="abrirModal()">Agregar Nuevo Equipo</button>
+            </div>
 
-      <h2>Agregar Equipo</h2>
+            <div class="tableCard">
+              <div class="tableHeader equiposGridHeader">
+                <span>Usuario</span>
+                <span>Marca</span>
+                <span>Modelo</span>
+                <span>Área</span>
+                <span>Service Tag</span>
+                <span>Técnico</span>
+                <span id="textAcciones" class="textAcciones">Acciones</span>
+              </div>
 
-      <form id="formEquipo">
-        <input type="text" id="marca" placeholder="Marca">
-        <input type="text" id="modelo" placeholder="Modelo">
-        <input type="text" id="service_tag" placeholder="Service Tag">
-        <input type="text" id="dueno_equipo" placeholder="Nombre del usuario">
-        <input type="text" id="area" placeholder="Area">
-        <select id="usuario_asignado"></select>
+              <ul id="listaEquipos" class="tableBodyList"></ul>
+            </div>
+          </section>
 
-        <button type="submit" onclick="cerrarModal()">Guardar</button>
-        <button type="button" onclick="cerrarModal()">Cancelar</button>
-      </form>
+          <!-- MANTENIMIENTOS -->
+          <section class="homeSection">
+            <div class="sectionHeader">
+              <div>
+                <h1>Mantenimientos</h1>
+                <p>Seguimiento de mantenimientos activos</p>
+              </div>
+            </div>
 
-    </div>
-  </div>
+            <div class="maintenanceFormCard" id="maintenanceFormCard">
+              <form id="formMantenimiento" class="formMantenimientoGrid">
 
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="app.js"></script>
-  <script>lucide.createIcons();</script>
-</body>
+                <select id="service_tag_mant" required>
+                  <option value="">Selecciona un equipo</option>
+                </select>
 
+                <select id="tipo">
+                  <option value="Preventivo">Preventivo</option>
+                  <option value="Correctivo">Correctivo</option>
+                </select>
+
+                <input type="text" id="descripcion" placeholder="Descripción">
+                <select id="tecnico_mant"></select>
+                <button type="submit">Agregar</button>
+
+              </form>
+            </div>
+
+            <div class="tableCard" id="mantenimientosTableCard">
+              <div class="tableHeader mantenimientosGridHeader">
+                <span>Service Tag</span>
+                <span>Tipo</span>
+                <span>Estado</span>
+                <span>Técnico</span>
+                <span>Acciones</span>
+              </div>
+              <ul id="listaMantenimientos" class="tableBodyList"></ul>
+            </div>
+
+            <div id="mantenimientosVacio" class="emptyStateCard" style="display: none;">
+              Aun no tienes mantenimientos asignados
+            </div>
+
+          </section>
+
+        </div> <!-- DASHBOARD HOME -->
+
+
+        <!-- MODAL -->
+        <div id="modalEquipo" class="modal">
+          <div class="modal-content">
+
+            <h2>Agregar Equipo</h2>
+
+            <form id="formEquipo">
+              <input type="text" id="marca" placeholder="Marca">
+              <input type="text" id="modelo" placeholder="Modelo">
+              <input type="text" id="service_tag" placeholder="Service Tag">
+              <input type="text" id="dueno_equipo" placeholder="Nombre del usuario">
+              <input type="text" id="area" placeholder="Area">
+              <select id="usuario_asignado"></select>
+
+              <button type="submit" onclick="cerrarModal()">Guardar</button>
+              <button type="button" onclick="cerrarModal()">Cancelar</button>
+            </form>
+
+          </div>
+        </div> <!-- modal -->
+      </div>  <!-- contEquipMant -->    
+    </div> <!-- cont -->
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="app.js"></script>
+    <script>lucide.createIcons();</script>
+
+  </body>
 </html>
 
 

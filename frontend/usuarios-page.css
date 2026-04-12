@@ -23,13 +23,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  margin: 40px 20px 25px 20px;
   gap: 20px;
   flex-wrap: wrap;
 }
 
 .usuariosHeader h1 {
-  font-size: 42px;
+  font-size: 32px;
   margin-bottom: 6px;
 }
 
@@ -67,7 +67,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  margin-bottom: 22px;
+  margin: 0 20px 22px 20px;
 }
 
 .resumenCard {
@@ -95,6 +95,7 @@
   border-radius: 14px;
   box-shadow: 0 0 12px rgba(0,0,0,0.08);
   overflow: hidden;
+  margin: 0 20px 0 20px;
 }
 
 .usuariosTablaHeader,
