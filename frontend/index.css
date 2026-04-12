@@ -323,7 +323,9 @@ button {
 /* Buscador styles ---------------------------- */
 .InputContainer {
     height: 40px;
-    width: 60%;
+    width: auto;
+    flex: 1;
+    max-width: 500px; /* opcional */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -426,7 +428,7 @@ button {
     display: flex;
     flex-direction: column;
     gap: 34px;
-    margin-top: 60px;
+    margin-top: 50px;
 }
 
 .homeSection {
