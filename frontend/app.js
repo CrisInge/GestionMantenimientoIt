@@ -288,8 +288,15 @@ async function cargarEquipos() {
         rol === "admin"
           ? `
           <div class="btnsAcciones">
-            <button onclick="event.stopPropagation(); mostrarEditar(${equipo.id_equipo})">Editar</button>
-            <button onclick="event.stopPropagation(); eliminarEquipo(${equipo.id_equipo})">Eliminar</button>
+            <button class="btnAccionIcono btnEditarIcono" title="Editar"
+              onclick="event.stopPropagation(); mostrarEditar(${equipo.id_equipo})">
+              <i class="fa-regular fa-pen-to-square"></i>
+            </button>
+
+            <button class="btnAccionIcono btnEliminarIcono" title="Eliminar"
+              onclick="event.stopPropagation(); eliminarEquipo(${equipo.id_equipo})">
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
           </div>
           `
           : `<div></div>`

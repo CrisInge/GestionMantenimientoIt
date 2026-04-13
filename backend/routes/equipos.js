@@ -89,15 +89,68 @@ router.put('/:id', (req, res) => {
 // DELETE (eliminar)
 // =====================
 router.delete('/:id', (req, res) => {
+  const id_equipo = req.params.id;
+
+  // 1. buscar mantenimientos del equipo
   db.query(
-    'DELETE FROM equipos WHERE id_equipo=?',
-    [req.params.id],
-    (err, result) => {
+    'SELECT id_mantenimiento FROM mantenimientos WHERE id_equipo = ?',
+    [id_equipo],
+    (err, mantenimientos) => {
       if (err) {
         console.error(err);
-        return res.status(500).json({ error: 'Error al eliminar equipo' });
+        return res.status(500).json({ error: 'Error al buscar mantenimientos del equipo' });
       }
-      res.json({ message: 'Equipo eliminado correctamente' });
+
+      const idsMantenimientos = mantenimientos.map(m => m.id_mantenimiento);
+
+      // 2. si hay mantenimientos, borrar historial primero
+      const borrarEquipo = () => {
+        db.query(
+          'DELETE FROM equipos WHERE id_equipo = ?',
+          [id_equipo],
+          (err3) => {
+            if (err3) {
+              console.error(err3);
+              return res.status(500).json({ error: 'Error al eliminar equipo' });
+            }
+
+            res.json({ message: 'Equipo eliminado correctamente' });
+          }
+        );
+      };
+
+      const borrarMantenimientos = () => {
+        db.query(
+          'DELETE FROM mantenimientos WHERE id_equipo = ?',
+          [id_equipo],
+          (err2) => {
+            if (err2) {
+              console.error(err2);
+              return res.status(500).json({ error: 'Error al eliminar mantenimientos del equipo' });
+            }
+
+            borrarEquipo();
+          }
+        );
+      };
+
+      if (idsMantenimientos.length === 0) {
+        // no hay mantenimientos, borrar equipo directo
+        return borrarEquipo();
+      }
+
+      db.query(
+        'DELETE FROM historial_mantenimiento WHERE mantenimiento_id IN (?)',
+        [idsMantenimientos],
+        (errHistorial) => {
+          if (errHistorial) {
+            console.error(errHistorial);
+            return res.status(500).json({ error: 'Error al eliminar historial del equipo' });
+          }
+
+          borrarMantenimientos();
+        }
+      );
     }
   );
 });
