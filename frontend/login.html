@@ -19,6 +19,7 @@ if (token) {
 async function login() {
   const correo = document.getElementById("correo").value;
   const password = document.getElementById("password").value;
+  console.log("URL login:", `${API}/auth/login`);
 
   const res = await fetch(`${API}/auth/login`, {
     method: "POST",
