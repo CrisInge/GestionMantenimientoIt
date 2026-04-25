@@ -110,7 +110,7 @@
               <button id="agregarEquipo" onclick="abrirModal()">Agregar Nuevo Equipo</button>
             </div>
 
-            <div class="tableCard">
+            <div class="tableCard" id="equiposTableCard">
               <div class="tableHeader equiposGridHeader">
                 <span>Usuario</span>
                 <span>Marca</span>
@@ -123,6 +123,11 @@
 
               <ul id="listaEquipos" class="tableBodyList"></ul>
             </div>
+            
+            <div id="equiposVacio" class="emptyStateCard" style="display: none;">
+              No tienes equipos asignados
+            </div>
+
           </section>
 
           <!-- MANTENIMIENTOS -->

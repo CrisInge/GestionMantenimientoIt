@@ -137,7 +137,11 @@ function cancelarEdicion(id) {
 if (rol === "tecnico") {
   document.getElementById("formEquipo").style.display = "none";
   document.getElementById("formMantenimiento").style.display = "none";
-  document.getElementById("textAcciones").style.display = "none";
+  // document.getElementById("textAcciones").style.display = "none";
+  const textAcciones = document.getElementById("textAcciones");
+    if (textAcciones) textAcciones.style.display = "none";
+  
+
 
   const historial = document.getElementById("linkMantenimientos");
   if (historial) historial.style.display = "none";
@@ -220,6 +224,18 @@ async function cargarEquipos() {
   const lista = document.getElementById("listaEquipos");
   lista.innerHTML = "";
 
+  const textAcciones = document.getElementById("textAcciones");
+  const equiposHeader = document.querySelector(".equiposGridHeader");
+
+  if (rol === "tecnico") {
+    if (textAcciones) textAcciones.classList.add("oculto");
+    if (equiposHeader) equiposHeader.classList.add("sinAcciones");
+  } else {
+    if (textAcciones) textAcciones.classList.remove("oculto");
+    if (equiposHeader) equiposHeader.classList.remove("sinAcciones");
+  }
+
+
   if (data.length === 0) {
     lista.innerHTML = `
       <p style="text-align:center; padding:20px;">
@@ -274,19 +290,18 @@ async function cargarEquipos() {
     // `;
 
 
-    li.innerHTML = `
+li.innerHTML = `
   <div class="item">
-    <div class="contSpan" onclick="toggleHistorial(${equipo.id_equipo})">
-      <span class="usuario">${equipo.dueno_equipo}</span>
+    <div class="contSpan ${rol === "admin" ? "" : "sinAcciones"}" onclick="toggleHistorial(${equipo.id_equipo})">
+      <span class="usuario" style="font-weight: normal;">${equipo.dueno_equipo}</span>
       <span class="marca">${equipo.marca}</span>
       <span class="modelo">${equipo.modelo}</span>
       <span class="area">${equipo.area}</span>
       <span class="service">${equipo.service_tag}</span>
       <span class="tecnico">${equipo.usuario_asignado || "Sin asignar"}</span>
 
-      ${
-        rol === "admin"
-          ? `
+      ${rol === "admin"
+        ? `
           <div class="btnsAcciones">
             <button class="btnAccionIcono btnEditarIcono" title="Editar"
               onclick="event.stopPropagation(); mostrarEditar(${equipo.id_equipo})">
@@ -298,8 +313,8 @@ async function cargarEquipos() {
               <i class="fa-regular fa-trash-can"></i>
             </button>
           </div>
-          `
-          : `<div></div>`
+        `
+        : ``
       }
     </div>
   </div>
@@ -385,7 +400,17 @@ async function toggleHistorial(id_equipo) {
   const res = await fetch(`${API}/mantenimientos/historial/${id_equipo}`);
   const data = await res.json();
 
-  div.innerHTML = "<h4>Historial</h4>";
+  // div.innerHTML = "<h4>Historial</h4>";
+  div.innerHTML = `
+  <div class="historialHeader">
+    <h4>Historial</h4>
+    <button class="btnAccionIcono btnVerIcono btnExportar" title="Exportar historial"
+      onclick="event.stopPropagation(); exportarHistorialEquipo(${id_equipo})"><div>Exportar</div>
+      <div style="margin-left: 10px;"><i class="fa-solid fa-file-export"></i></div>
+    </button>
+  </div>
+  `;
+
 
   if (data.length === 0) {
     div.innerHTML += `<p style="color:#666;">Este equipo no tiene historial todavía.</p>`;
@@ -394,7 +419,7 @@ async function toggleHistorial(id_equipo) {
 
   data.forEach(m => {
     div.innerHTML += `
-      <div class="item">
+      <div class="item" style="margin: 0px;">
         <span><strong>Tipo:</strong> ${m.tipo}</span>
         <span><strong>Estado:</strong> ${m.estado}</span>
         <span><strong>Técnico:</strong> ${m.tecnico || "Sin asignar"}</span>
@@ -405,6 +430,61 @@ async function toggleHistorial(id_equipo) {
     `;
   });
 }
+
+async function exportarHistorialEquipo(id_equipo) {
+  try {
+    const res = await fetch(`${API}/mantenimientos/historial/${id_equipo}`);
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      alert("Este equipo no tiene historial para exportar");
+      return;
+    }
+
+    const encabezados = [
+      "Tipo",
+      "Estado",
+      "Tecnico",
+      "Inicio",
+      "Fin",
+      "Solucion"
+    ];
+
+    const filas = data.map(m => [
+      m.tipo || "",
+      m.estado || "",
+      m.tecnico || "Sin asignar",
+      m.fecha_inicio ? new Date(m.fecha_inicio).toLocaleString() : "Sin fecha",
+      m.fecha_fin ? new Date(m.fecha_fin).toLocaleString() : "En proceso",
+      m.comentario || "Sin solución"
+    ]);
+
+    const contenidoCSV = [
+      encabezados.join(","),
+      ...filas.map(fila =>
+        fila.map(valor => `"${String(valor).replace(/"/g, '""')}"`).join(",")
+      )
+    ].join("\n");
+
+    const blob = new Blob([contenidoCSV], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `historial_equipo_${id_equipo}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Error exportando historial:", error);
+    alert("No se pudo exportar el historial");
+  }
+}
+
+
+
 
 // CARGAR TECNICOS EN MANTENIMIENTO
 async function cargarTecnicosMant() {
@@ -472,10 +552,21 @@ async function cargarMantenimientos() {
           <span>${m.tipo}</span>
           <span>${m.estado}</span>
           <span>${m.tecnico || "Sin asignar"}</span>
-          <div>
-            <button onclick="terminarMantenimiento(${m.id_mantenimiento})">Terminar</button>
-            <button onclick="eliminarMantenimiento(${m.id_mantenimiento})">Eliminar</button>
-          </div>
+          <td>
+            <div class="btnsAcciones">
+
+              <button class="btnAccionIcono btnEditarIcono" title="Terminar"
+                onclick="terminarMantenimiento(${m.id_mantenimiento})">
+                <i class="fa-solid fa-check"></i>
+              </button>
+
+              <button class="btnAccionIcono btnEliminarIcono" title="Eliminar"
+                onclick="eliminarMantenimiento(${m.id_mantenimiento})">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+
+            </div>
+          </td>
         </div>
       `;
     } else {

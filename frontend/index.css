@@ -479,7 +479,7 @@ button {
     background: #fafafa;
     border-bottom: 1px solid #ececec;
     font-weight: bold;
-    color: #555;
+    color: #1b1b1b;
 }
 
 .equiposGridHeader {
@@ -792,6 +792,10 @@ button {
     padding: 0;
 }
 
+.btnExportar {
+    width: 130px;
+}
+
 .btnEditarIcono {
     background: #f3f3f3;
     color: #333;
@@ -806,4 +810,43 @@ button {
 .btnVerIcono {
     background: #293D96;
     color: #fff;
+}
+
+
+#listaEquipos .item > .contSpan.sinAcciones {
+    grid-template-columns: 1.3fr 1fr 1fr 0.8fr 1fr 1fr !important;
+}
+
+.oculto {
+    display: none !important;
+}
+
+.equiposGridHeader {
+    grid-template-columns: 1.3fr 1fr 1fr 0.8fr 1fr 1fr 140px;
+}
+
+.oculto {
+  display: none !important;
+}
+
+.equiposGridHeader.sinAcciones {
+  grid-template-columns: 1.3fr 1fr 1fr 0.8fr 1fr 1fr !important;
+}
+
+#listaEquipos .item > .contSpan.sinAcciones {
+  grid-template-columns: 1.3fr 1fr 1fr 0.8fr 1fr 1fr !important;
+}
+
+.historialHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 20px 14px 20px;
+    /* margin-bottom: 14px; */
+}
+
+.historialHeader h4 {
+    margin: 0;
+    font-size: 18px;
+    color: #222;
 }
