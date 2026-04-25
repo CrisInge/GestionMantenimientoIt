@@ -1,4 +1,5 @@
-const API = "http://localhost:3000";
+// const API = "http://localhost:3000";
+const API = "https://illustrious-enthusiasm-production-0827.up.railway.app";
 const token = localStorage.getItem("token");
 const id = localStorage.getItem("id");
 const rol = localStorage.getItem("rol");
